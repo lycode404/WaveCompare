@@ -23,7 +23,7 @@ def read_wave_data(file_path):
 	wave_data = wave_data.T
 	#calculate the time bar
 	time = np.arange(0, nframes) * (1.0/framerate)
-	return wave_data, time
+	return wave_data, time #return 2*n array and n*1 array
  
 def main():
 	wave_data, time = read_wave_data(input('Enter the path of first wav file:').replace('"',''))	
@@ -36,16 +36,23 @@ def main():
 	plt.plot(time, wave_data[1])
 	plt.title('First File(Right Channel)')
 	plt.subplot(323)
-	plt.plot(time, wave_data2[0], c = "g")
+	plt.plot(time2, wave_data2[0], c = "g")
 	plt.title('Second File(Left Channel)')
 	plt.subplot(324)
-	plt.plot(time, wave_data2[1], c = "g")
+	plt.plot(time2, wave_data2[1], c = "g")
 	plt.title('Second File(Right Channel)')
+	if time.shape[0] > time2.shape[0]:
+		minlength = time2.shape[0]
+		mintime = time2
+	else:
+		minlength = time.shape[0]
+		mintime = time
 	plt.subplot(325)
-	plt.plot(time, wave_data[0]-wave_data2[0], c = "r")
+	# 0:minlength = 取矩阵0列 ~ minlength-1列（左闭右开）
+	plt.plot(mintime, wave_data[0,0:minlength]-wave_data2[0,0:minlength], c = "r")
 	plt.title('Difference between Left Channel')
 	plt.subplot(326)
-	plt.plot(time, wave_data[1]-wave_data2[1], c = "r")
+	plt.plot(mintime, wave_data[1,0:minlength]-wave_data2[1,0:minlength], c = "r")
 	plt.title('Difference between Right Channel')
 	plt.show()
 	
